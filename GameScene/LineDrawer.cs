@@ -26,8 +26,12 @@ public class LineDrawer : MonoBehaviour
 
     private RaycastHit2D hit2D;
 
+    private bool isFinishDrawing = false;
+
     void Update()
     {
+        if(isFinishDrawing) return;
+        
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -84,6 +88,7 @@ public class LineDrawer : MonoBehaviour
             if (judgeAllSet == lineRenderer.Count)
             {
                 _finishDrawing.OnNext(true);
+                isFinishDrawing = true;
             }
 
             judgeAllSet = 0;

@@ -7,7 +7,7 @@ public class CanvasController : MonoBehaviour
 {
     private int clearCounter;
 
-    private int failedCounter;
+    private int allCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -17,16 +17,17 @@ public class CanvasController : MonoBehaviour
             ResourceProvider.i.characters[i].goal.Subscribe(i =>
             {
                 clearCounter++;
+                allCounter++;
             });
 
             ResourceProvider.i.characters[i].noGoal.Subscribe(i =>
             {
-                failedCounter++;
+                allCounter++;
             });
 
             ResourceProvider.i.characters[i].collide.Subscribe(i =>
             {
-                failedCounter++;
+                allCounter++;
             });
         }
     }
@@ -34,14 +35,16 @@ public class CanvasController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(allCounter < ResourceProvider.i.charactersAmount) return;
+        
         if (clearCounter >= ResourceProvider.i.charactersAmount)
         {
             StartCoroutine(ChangeCanvas(1));
         }  
-        else if(failedCounter >= ResourceProvider.i.charactersAmount)
+        else
         {
             StartCoroutine(ChangeCanvas(2));
-        }
+        } 
     }
 
     private IEnumerator ChangeCanvas(int index)
@@ -51,7 +54,7 @@ public class CanvasController : MonoBehaviour
         ResourceProvider.i.canvases[0].gameObject.SetActive(false);
         ResourceProvider.i.canvases[index].gameObject.SetActive(true);
 
-        failedCounter = 0;
+        allCounter = 0;
         clearCounter = 0;
     }
 }
