@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UniRx;
 
-
+//各キャラクターのパスを描くスクリプト
 public class LineDrawer : MonoBehaviour
 {
 
@@ -19,7 +19,7 @@ public class LineDrawer : MonoBehaviour
 
     private Subject<bool> _finishDrawing = new Subject<bool>();
 
-    public IObservable<bool> finishDrawing
+    public IObservable<bool> finishDrawing//全てのキャラのパスを書き終えたことを通知する
     {
         get { return _finishDrawing; }
     }
@@ -30,15 +30,17 @@ public class LineDrawer : MonoBehaviour
 
     void Update()
     {
-        if(isFinishDrawing) return;
-        
+        if (isFinishDrawing) return;
+
         if (Input.GetMouseButtonDown(0))
         {
+            //キャラ以外のLayerはIgnoreRayCastにしてある
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             hit2D = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction);
 
             Debug.Log(hit2D.collider);
 
+            //RayCastより入手したキャラのタグによって扱うlineRendererのインデックスを変更する
             if (hit2D.collider)
             {
                 if (hit2D.collider.gameObject.CompareTag("Male"))
@@ -60,11 +62,30 @@ public class LineDrawer : MonoBehaviour
             }
         }
 
-        if(hit2D.collider == null) return;
+        if (hit2D.collider == null) return;
 
         if (Input.GetMouseButton(0))
         {
             var mouseInput = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+            
+            //カメラ外にパスがかかれないように制限
+            if (mouseInput.x > Screen.width)
+            {
+                mouseInput.x = Screen.width;
+            }
+            else if (mouseInput.x < 0)
+            {
+                mouseInput.x = 0;
+            }
+
+            if (mouseInput.y > Screen.height)
+            {
+                mouseInput.y = Screen.height;
+            }
+            else if (mouseInput.y < 0)
+            {
+                mouseInput.y = 0;
+            }
 
             mouseInput = Camera.main.ScreenToWorldPoint(mouseInput);
 
@@ -84,7 +105,7 @@ public class LineDrawer : MonoBehaviour
                     judgeAllSet++;
                 }
             }
-
+    
             if (judgeAllSet == lineRenderer.Count)
             {
                 _finishDrawing.OnNext(true);

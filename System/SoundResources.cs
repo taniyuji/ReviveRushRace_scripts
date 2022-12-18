@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//効果音を管理するスクリプト 
 [CreateAssetMenu]
 public class SoundResources : ScriptableObject
 {
     private static SoundResources _instance;
 
+    //シーン上に実態がないため、スクリプトから参照される場合はprefabから自身をロードして提供する
     public static SoundResources Instance
     {
         get

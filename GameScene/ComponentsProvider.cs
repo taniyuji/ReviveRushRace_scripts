@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//各オブジェクトのコンポーネントを管理するスクリプト(GetComponentを極力少なくするため)
 public class ComponentsProvider : MonoBehaviour
 {
     [SerializeField]

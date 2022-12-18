@@ -5,43 +5,56 @@ using DG.Tweening;
 using UniRx;
 using System;
 
+//キャラクターの動きを管理するスクリプト
 public class CharacterMover : MonoBehaviour
 {
-    [SerializeField]
-    private float moveSpeed;
+    private float moveSpeed = 2;//線に沿って動く時の速さ
 
-    private ComponentsProvider componentsProvider;
+    private float floatSpeed = 0.15f;//待機時の浮遊速度
 
-    private List<Vector3> path = new List<Vector3>();
+    private float floatAmount = 0.1f;//待機時の浮遊の上下量
+
+    private ComponentsProvider componentsProvider;//このオブジェクトのコンポーネントを一括管理するスクリプト
+
+    private List<Vector3> path = new List<Vector3>();//lineRendererのPath情報を格納する
 
     private Sequence sequence;
 
-    private bool canMove = false;
-
-    private float distance;
+    private float distance;//lineRendererのpathの長さを格納する
 
     private Subject<Vector3> _collide = new Subject<Vector3>();
 
-    public IObservable<Vector3> collide
+    public IObservable<Vector3> collide//衝突したことをsmokeControllerに通知
     {
         get { return _collide; }
     }
 
     private Subject<bool> _goal = new Subject<bool>();
 
-    public IObservable<bool> goal
+    public IObservable<bool> goal//ゴールアニメーションが終了したのちにGoalBehaviorに通知
     {
         get { return _goal; }
     }
 
     private Subject<bool> _noGoal = new Subject<bool>();
 
-    public IObservable<bool> noGoal
+    public IObservable<bool> noGoal//何も衝突せずに失敗したことをCanvasControllerに通知
     {
         get { return _noGoal; }
     }
 
-    private bool isCollide = false;
+    private enum CharacterState
+    {
+        Idle,
+        IsMoving,
+        IsCollide,
+    }
+
+    private CharacterState state = CharacterState.Idle;
+
+    private float floatCounter = 0;
+
+    private bool isPlus;
 
     void Awake()
     {
@@ -51,6 +64,7 @@ public class CharacterMover : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //全てのキャラのパスが書き終えられた通知を受け取ったらパスに沿って動き出す
         ResourceProvider.i.lineDrawer.finishDrawing.Subscribe(j =>
         {
             for (int i = 0, amount = componentsProvider.lineRenderer.positionCount; i < amount; i++)
@@ -64,25 +78,25 @@ public class CharacterMover : MonoBehaviour
 
             StartCoroutine(Move());
 
-            canMove = true;
+            state = CharacterState.IsMoving;
         });
     }
 
     private IEnumerator Move()
     {
-        yield return null;
+        yield return null;//パスの代入とdistanceの計算終了を待つ
 
         sequence = DOTween.Sequence();
 
-        moveSpeed += distance * 0.1f;
+        moveSpeed += distance * 0.1f;//距離が長いほど時間がかかるよう調整
 
         SoundManager.i.PlayOneShot(2, 0.3f);
 
         sequence.Append(transform.DOMove(path[0], 0.1f).SetEase(Ease.OutSine))
                 .Append(transform.DOPath(path.ToArray(), moveSpeed - 0.1f, PathType.CatmullRom).SetEase(Ease.OutSine))
-                .AppendCallback(() => 
+                .AppendCallback(() =>
                 {
-                    if (!isCollide)
+                    if (state != CharacterState.IsCollide)//何も衝突せず失敗した場合
                     {
                         componentsProvider.spriteRenderer.sprite = componentsProvider.sadSprite;
                         _noGoal.OnNext(true);
@@ -90,9 +104,33 @@ public class CharacterMover : MonoBehaviour
                 }).SetDelay(0.3f);
     }
 
+    void Update()
+    {
+        if(state == CharacterState.IsMoving) return;
+        
+        //パスに沿って動き出すまで浮遊アニメーションさせる
+        if(floatCounter > floatAmount)
+        {
+            floatCounter = 0;
+            isPlus = !isPlus;
+        }
+
+        floatCounter += floatSpeed * Time.deltaTime;
+
+        var plusY = isPlus ? floatSpeed * Time.deltaTime : -floatSpeed * Time.deltaTime;
+
+        transform.position = new Vector3(transform.position.x,
+                                         transform.position.y + plusY,
+                                         1);
+
+
+    }
+
+ 
+
     void OnCollisionEnter2D(Collision2D collisionInfo)
     {
-        if (isCollide) return;
+        if (state == CharacterState.IsCollide) return;
 
         if (gameObject.tag != collisionInfo.gameObject.tag)//ゴールとの衝突以外の場合
         {
@@ -111,6 +149,6 @@ public class CharacterMover : MonoBehaviour
                     .AppendCallback(() => _goal.OnNext(true));
         }
 
-        isCollide = true;
+        state = CharacterState.IsCollide;
     }
 }

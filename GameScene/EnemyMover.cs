@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//敵（死神、天使など）を動かすスクリプト
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField]
-    private bool moveHorizontal;
+    private bool moveHorizontal;//水平方向に動かすか
 
     [SerializeField]
-    private bool firstMinus;
+    private bool firstMinus;//初めにマイナス方向に動かすか
 
     [SerializeField]
     private float moveSpeed;

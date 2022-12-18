@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 
+//ゴールの挙動を扱うスクリプト
 public class GoalBehavior : MonoBehaviour
 {
     [SerializeField]
@@ -25,9 +26,12 @@ public class GoalBehavior : MonoBehaviour
         {
             mover = collisionInfo.gameObject.GetComponent<CharacterMover>();
 
+            //Characterのゴールアニメーション終了通知を受け取った場合
             mover.goal.Subscribe(i =>
             {
                 spriteRenderer.sprite = goalSprite;
+
+                spriteRenderer.color = new Color(1, 1, 1, 1);
 
                 SoundManager.i.PlayOneShot(4, 0.5f);
             });

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//効果音をplayするスクリプト
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager i { get; private set; }
@@ -18,6 +19,7 @@ public class SoundManager : MonoBehaviour
     [RuntimeInitializeOnLoadMethod()]
     static void Init()
     {
+        //prefabから自身を生成しシングルトン化
         var prefab = Resources.Load("System/SoundManager");
         var SoundManager = Instantiate(prefab, Vector3.zero, Quaternion.identity);
         DontDestroyOnLoad(SoundManager);

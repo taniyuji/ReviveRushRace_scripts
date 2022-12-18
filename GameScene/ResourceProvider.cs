@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//シーン上にひとつしかないオブジェクトの参照を管理するスクリプト
 public class ResourceProvider : MonoBehaviour
 {
     public static ResourceProvider i { get; private set; }
-
-    [SerializeField]
-    private GameManager _gameManager;
-
-    public GameManager gameManager
-    {
-        get { return _gameManager; }
-    }
 
     [SerializeField]
     private LineDrawer _lineDrawer;
