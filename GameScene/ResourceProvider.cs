@@ -36,6 +36,14 @@ public class ResourceProvider : MonoBehaviour
         get { return _canvases; }
     }
 
+    [SerializeField]
+    private Save _save;
+
+    public Save save
+    {
+        get { return _save; }
+    }
+
     void Awake()
     {
         i = this;

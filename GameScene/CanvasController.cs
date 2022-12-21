@@ -64,13 +64,17 @@ public class CanvasController : MonoBehaviour
         ResourceProvider.i.canvases[0].gameObject.SetActive(false);
         ResourceProvider.i.canvases[index].gameObject.SetActive(true);
 
-        if (index == 1)
+        if (index == 1)//クリアした場合
         {
             SoundManager.i.PlayOneShot(5, 0.5f);
+
+            ResourceProvider.i.save.SaveSceneNumber();
         }
         else
         {
             SoundManager.i.PlayOneShot(7, 0.3f);
+
+
         }
     }
 }

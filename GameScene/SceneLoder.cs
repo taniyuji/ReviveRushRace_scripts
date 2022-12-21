@@ -10,7 +10,7 @@ public class SceneLoder : MonoBehaviour
     {
         index = SceneManager.GetActiveScene().buildIndex + 1;
 
-        if(index == 0) return;
+        if (index == 0) return;
 
         SceneManager.LoadScene(index);
     }
@@ -22,5 +22,11 @@ public class SceneLoder : MonoBehaviour
         if (index == 0) return;
 
         SceneManager.LoadScene(index);
+    }
+
+    public void LoadLastScene()
+    {
+        //Debug.Log(PlayerPrefs.GetInt("SceneIndex"));
+        SceneManager.LoadScene(PlayerPrefs.GetInt("SceneIndex"));
     }
 }
