@@ -17,9 +17,9 @@ public class LineDrawer : MonoBehaviour
 
     private int lineCount = 0;
 
-    private Subject<bool> _finishDrawing = new Subject<bool>();
+    private Subject<Unit> _finishDrawing = new Subject<Unit>();
 
-    public IObservable<bool> finishDrawing//全てのキャラのパスを書き終えたことを通知する
+    public IObservable<Unit> finishDrawing//全てのキャラのパスを書き終えたことを通知する
     {
         get { return _finishDrawing; }
     }
@@ -108,7 +108,7 @@ public class LineDrawer : MonoBehaviour
     
             if (judgeAllSet == lineRenderer.Count)
             {
-                _finishDrawing.OnNext(true);
+                _finishDrawing.OnNext(Unit.Default);
                 isFinishDrawing = true;
             }
 

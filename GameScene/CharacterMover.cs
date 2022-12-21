@@ -29,16 +29,16 @@ public class CharacterMover : MonoBehaviour
         get { return _collide; }
     }
 
-    private Subject<bool> _goal = new Subject<bool>();
+    private Subject<Unit> _goal = new Subject<Unit>();
 
-    public IObservable<bool> goal//ゴールアニメーションが終了したのちにGoalBehaviorに通知
+    public IObservable<Unit> goal//ゴールアニメーションが終了したのちにGoalBehaviorに通知
     {
         get { return _goal; }
     }
 
-    private Subject<bool> _noGoal = new Subject<bool>();
+    private Subject<Unit> _noGoal = new Subject<Unit>();
 
-    public IObservable<bool> noGoal//何も衝突せずに失敗したことをCanvasControllerに通知
+    public IObservable<Unit> noGoal//何も衝突せずに失敗したことをCanvasControllerに通知
     {
         get { return _noGoal; }
     }
@@ -99,7 +99,7 @@ public class CharacterMover : MonoBehaviour
                     if (state != CharacterState.IsCollide)//何も衝突せず失敗した場合
                     {
                         componentsProvider.spriteRenderer.sprite = componentsProvider.sadSprite;
-                        _noGoal.OnNext(true);
+                        _noGoal.OnNext(Unit.Default);
                     }
                 }).SetDelay(0.3f);
     }
@@ -146,7 +146,7 @@ public class CharacterMover : MonoBehaviour
 
             sequence.Append(transform.DOScale(Vector3.zero, 0.3f))
                     .Join(transform.DOMove(collisionInfo.transform.position, 0.3f))
-                    .AppendCallback(() => _goal.OnNext(true));
+                    .AppendCallback(() => _goal.OnNext(Unit.Default));
         }
 
         state = CharacterState.IsCollide;
