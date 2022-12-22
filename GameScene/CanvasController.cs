@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UnityEngine.UI;
 
 //クリア、ゲームオーバー画面を管理するスクリプト
 public class CanvasController : MonoBehaviour
 {
+    [SerializeField]
+    private List<Sprite> clearImages;
+
+    [SerializeField]
+    private List<Sprite> failedImages;
+
+    [SerializeField]
+    private Image clearImage;
+
+    [SerializeField]
+    private Image failedImage;
+
     private int clearCounter;
 
     private int allCounter;
@@ -36,6 +49,9 @@ public class CanvasController : MonoBehaviour
         ResourceProvider.i.canvases[0].gameObject.SetActive(true);
         ResourceProvider.i.canvases[1].gameObject.SetActive(false);
         ResourceProvider.i.canvases[2].gameObject.SetActive(false);
+
+        clearImage.sprite = clearImages[ResourceProvider.i.charactersAmount - 1];
+        failedImage.sprite = failedImages[ResourceProvider.i.charactersAmount - 1];
     }
 
     // Update is called once per frame

@@ -7,9 +7,7 @@ using UniRx;
 //各キャラクターのパスを描くスクリプト
 public class LineDrawer : MonoBehaviour
 {
-
-    [SerializeField]
-    private List<LineRenderer> lineRenderer;
+    private List<LineRenderer> lineRenderers = new List<LineRenderer>();
 
     private int lineIndex;
 
@@ -28,6 +26,14 @@ public class LineDrawer : MonoBehaviour
 
     private bool isFinishDrawing = false;
 
+    void Start()
+    {
+        for (int i = 0; i < ResourceProvider.i.charactersAmount; i++)
+        {
+            lineRenderers.Add(ResourceProvider.i.characters[i].GetComponent<LineRenderer>());
+        }
+    }
+
     void Update()
     {
         if (isFinishDrawing) return;
@@ -38,7 +44,7 @@ public class LineDrawer : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             hit2D = Physics2D.Raycast((Vector2)ray.origin, (Vector2)ray.direction);
 
-            Debug.Log(hit2D.collider);
+            //Debug.Log(hit2D.collider);
 
             //RayCastより入手したキャラのタグによって扱うlineRendererのインデックスを変更する
             if (hit2D.collider)
@@ -56,7 +62,7 @@ public class LineDrawer : MonoBehaviour
                     lineIndex = 2;
                 }
 
-                lineRenderer[lineIndex].enabled = true;
+                lineRenderers[lineIndex].enabled = true;
 
                 SoundManager.i.PlayOneShot(0, 0.5f);
             }
@@ -91,22 +97,22 @@ public class LineDrawer : MonoBehaviour
 
             lineCount++;
 
-            lineRenderer[lineIndex].positionCount = lineCount;
+            lineRenderers[lineIndex].positionCount = lineCount;
 
-            lineRenderer[lineIndex].SetPosition(lineCount - 1, mouseInput);
+            lineRenderers[lineIndex].SetPosition(lineCount - 1, mouseInput);
         }
 
         if (Input.GetMouseButtonUp(0))
         {
-            for (int i = 0, amount = lineRenderer.Count; i < amount; i++)
+            for (int i = 0, amount = lineRenderers.Count; i < amount; i++)
             {
-                if (lineRenderer[i].enabled)
+                if (lineRenderers[i].enabled)
                 {
                     judgeAllSet++;
                 }
             }
     
-            if (judgeAllSet == lineRenderer.Count)
+            if (judgeAllSet == lineRenderers.Count)
             {
                 _finishDrawing.OnNext(Unit.Default);
                 isFinishDrawing = true;

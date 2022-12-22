@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//敵（死神、天使など）を動かすスクリプト
-public class EnemyMover : MonoBehaviour
+//死神を動かすスクリプト
+public class GrimReaperMover : MonoBehaviour
 {
     [SerializeField]
     private bool moveHorizontal;//水平方向に動かすか

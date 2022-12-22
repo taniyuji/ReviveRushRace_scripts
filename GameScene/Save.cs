@@ -9,7 +9,16 @@ public class Save : MonoBehaviour
     {
         PlayerPrefs.SetInt("SceneIndex", SceneManager.GetActiveScene().buildIndex + 1);
 
-       // Debug.Log(PlayerPrefs.GetInt("SceneIndex"));
+        // Debug.Log(PlayerPrefs.GetInt("SceneIndex"));
+
+        PlayerPrefs.Save();
+    }
+
+    public void ResetSceneNumber()
+    {
+        PlayerPrefs.SetInt("SceneIndex", 1);
+
+        // Debug.Log(PlayerPrefs.GetInt("SceneIndex"));
 
         PlayerPrefs.Save();
     }
