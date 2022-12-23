@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//初めのシーンに出てくるチュートリアルアニメーションを制御するスクリプト
 public class TutorialHand : MonoBehaviour
 {
     [SerializeField]
@@ -26,6 +27,7 @@ public class TutorialHand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //プレイヤーがクリックをしたらチュートリアル終了
         if (Input.GetMouseButtonDown(0))
         {
             gameObject.SetActive(false);

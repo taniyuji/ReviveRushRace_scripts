@@ -11,14 +11,11 @@ public class SmokeController : MonoBehaviour
 
     private List<ParticleSystem> smokes = new List<ParticleSystem>();
 
-
-    // Start is called before the first frame update
-
     void Start()
     {
         //キャラクターの人数分の煙を用意する
         smokes.Add(smoke);
-
+        
         for (int i = 0, amount = ResourceProvider.i.characters.Count; i < amount; i++)
         {
             if(i != 0) smokes.Add(Instantiate(smoke, transform));

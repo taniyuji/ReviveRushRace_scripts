@@ -49,18 +49,8 @@ public class LineDrawer : MonoBehaviour
             //RayCastより入手したキャラのタグによって扱うlineRendererのインデックスを変更する
             if (hit2D.collider)
             {
-                if (hit2D.collider.gameObject.CompareTag("Male"))
-                {
-                    lineIndex = 0;
-                }
-                else if (hit2D.collider.gameObject.CompareTag("Women"))
-                {
-                    lineIndex = 1;
-                }
-                else if (hit2D.collider.gameObject.CompareTag("Dog"))
-                {
-                    lineIndex = 2;
-                }
+                //ResourceProviderにあるキャラのタグとインデックス番号を対応させたdictionaryを呼び出す
+                lineIndex = ResourceProvider.i.getCharacterIndex[hit2D.collider.gameObject.tag];
 
                 lineRenderers[lineIndex].enabled = true;
 
@@ -104,6 +94,7 @@ public class LineDrawer : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            //リストのlineRendererたちが全てenableになっているかで全てのキャラのパスを書き終えたかを判断
             for (int i = 0, amount = lineRenderers.Count; i < amount; i++)
             {
                 if (lineRenderers[i].enabled)
@@ -111,7 +102,8 @@ public class LineDrawer : MonoBehaviour
                     judgeAllSet++;
                 }
             }
-    
+
+            //全てのキャラのパスを書き終えた場合
             if (judgeAllSet == lineRenderers.Count)
             {
                 _finishDrawing.OnNext(Unit.Default);

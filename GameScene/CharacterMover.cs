@@ -54,7 +54,7 @@ public class CharacterMover : MonoBehaviour
 
     private float floatCounter = 0;
 
-    private bool isPlus;
+    private float floatAddY = 0;
 
     void Awake()
     {
@@ -91,7 +91,7 @@ public class CharacterMover : MonoBehaviour
         moveSpeed += distance * 0.1f;//距離が長いほど時間がかかるよう調整
 
         SoundManager.i.PlayOneShot(2, 0.3f);
-
+        //線に沿って動かす
         sequence.Append(transform.DOMove(path[0], 0.1f).SetEase(Ease.OutSine))
                 .Append(transform.DOPath(path.ToArray(), moveSpeed - 0.1f, PathType.CatmullRom).SetEase(Ease.OutSine))
                 .AppendCallback(() =>
@@ -99,6 +99,7 @@ public class CharacterMover : MonoBehaviour
                     if (state != CharacterState.IsCollide)//何も衝突せず失敗した場合
                     {
                         componentsProvider.spriteRenderer.sprite = componentsProvider.sadSprite;
+                        //失敗したことを通知
                         _noGoal.OnNext(Unit.Default);
                     }
                 }).SetDelay(0.3f);
@@ -112,15 +113,18 @@ public class CharacterMover : MonoBehaviour
         if(floatCounter > floatAmount)
         {
             floatCounter = 0;
-            isPlus = !isPlus;
+            floatAddY *= -1;
         }
 
         floatCounter += floatSpeed * Time.deltaTime;
 
-        var plusY = isPlus ? floatSpeed * Time.deltaTime : -floatSpeed * Time.deltaTime;
+        if(floatAddY < 0) floatAddY = -1;
+        else  floatAddY = 1;
+
+        floatAddY *= floatSpeed * Time.deltaTime;
 
         transform.position = new Vector3(transform.position.x,
-                                         transform.position.y + plusY,
+                                         transform.position.y + floatAddY,
                                          1);
 
 

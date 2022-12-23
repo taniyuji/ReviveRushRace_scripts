@@ -28,6 +28,9 @@ public class ResourceProvider : MonoBehaviour
         get { return _characters.Count; }
     }
 
+    //キャラクター名とそのcharactersリスト上のインデックス番号を結びつける
+    public Dictionary<string, int> getCharacterIndex { get; private set; } = new Dictionary<string, int>();
+
     [SerializeField]
     private List<Canvas> _canvases;
 
@@ -47,5 +50,10 @@ public class ResourceProvider : MonoBehaviour
     void Awake()
     {
         i = this;
+
+        for (int i = 0; i < characters.Count; i++)
+        {
+            getCharacterIndex.Add(characters[i].gameObject.tag, i);
+        }
     }
 }

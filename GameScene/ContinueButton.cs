@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//タイトル画面の続きからゲームをプレイするボタン
 public class ContinueButton : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
+        //まだゲーム進度をセーブしていない場合はボタンを表示させない
         if (PlayerPrefs.GetInt("SceneIndex") == 0)
         {
             gameObject.SetActive(false);

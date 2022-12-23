@@ -12,28 +12,22 @@ public class AngelMover : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        //既に目標のキャラクター情報を入手している場合は返す
+        //既に追尾対象のキャラクター情報を入手している場合は返す
         if (target != null) return;
 
-        //ゴールとキャラクターのタグが同じのため、CharacterMoverを取得して衝突したのがキャラクターかを確認
-        if (other.gameObject.CompareTag("Male") || other.gameObject.CompareTag("Women") || other.gameObject.CompareTag("Dog"))
-        {
-            target = other.GetComponent<CharacterMover>();
-
-            //Debug.Log(target);
-        }
+        target = other.GetComponent<CharacterMover>();
     }
 
     void Update()
     {
-        //目標のキャラクターの情報を得た場合にその目標に向かって動かす
+        //追尾対象のキャラクターの情報を得た場合に追尾開始
         if (target == null) return;
 
         var step = moveSpeed * Time.deltaTime;
 
         transform.position = Vector2.MoveTowards(transform.position, target.transform.position, step);
 
-        Debug.Log(target.gameObject.transform.position);
+        //Debug.Log(target.gameObject.transform.position);
 
         if (!target.gameObject.activeSelf)
         {

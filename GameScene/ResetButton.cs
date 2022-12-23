@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+//デバッグ用のリセット機能
 public class ResetButton : MonoBehaviour
 {
     // Start is called before the first frame update

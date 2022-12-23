@@ -26,6 +26,7 @@ public class SoundManager : MonoBehaviour
         Debug.Log("Created SM");
     }
     
+    //ScriptableObjectであるSoundResourcesから効果音を取得して再生
     public void PlayOneShot(int index, float volume)
     {
         if(SoundResources.Instance.resources.Count - 1 < index) return;

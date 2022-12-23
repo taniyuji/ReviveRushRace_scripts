@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//死神を動かすスクリプト
+//死神を動かすスクリプト。横か縦1方向に往復しながら動く
 public class GrimReaperMover : MonoBehaviour
 {
     [SerializeField]
@@ -16,7 +16,6 @@ public class GrimReaperMover : MonoBehaviour
 
     private Vector3 moveVector;
 
-    // Start is called before the first frame update
     void Start()
     {
         moveVector = moveHorizontal ? new Vector2(1, 0) : new Vector2(0, 1);
