@@ -47,6 +47,22 @@ public class ResourceProvider : MonoBehaviour
         get { return _save; }
     }
 
+    [SerializeField]
+    private FadeController _fadeController;
+
+    public FadeController fadeController
+    {
+        get { return _fadeController; }
+    }
+
+    [SerializeField]
+    private SceneLoader _sceneLoader;
+
+    public SceneLoader sceneLoader
+    {
+        get { return _sceneLoader; }
+    }
+
     void Awake()
     {
         i = this;

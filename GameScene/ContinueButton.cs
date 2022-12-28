@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//タイトル画面の続きからゲームをプレイするボタン
+//タイトル画面の続きからゲームをプレイするボタンの表示を管理するスクリプト
 public class ContinueButton : MonoBehaviour
 {
     void Start()
