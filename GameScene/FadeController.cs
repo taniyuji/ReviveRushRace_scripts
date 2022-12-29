@@ -14,6 +14,12 @@ public class FadeController : MonoBehaviour
     private List<Transform> blacks;//left = 0, right = 1, up = 2, down = 3の順で格納
 
     [SerializeField]
+    private List<Sprite> fadeCharacters;
+
+    [SerializeField]
+    private SpriteRenderer fadeCharacter;
+
+    [SerializeField]
     private bool isFadeIn = true;
 
     private bool isFinishFade = false;
@@ -41,13 +47,16 @@ public class FadeController : MonoBehaviour
 
         screenEdgePos = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 1));
 
+        fadeCharacter.sprite = fadeCharacters[UnityEngine.Random.Range(0, fadeCharacters.Count)];
+
+        fadeCharacter.transform.position = screenCenterPos;
+
+        fadeCharacter.transform.localScale = Vector3.zero;
 
         for (int i = 0; i < blacks.Count; i++)
         {
             blacks[i].transform.position = screenCenterPos;
         }
-
-
     }
 
     void Update()
@@ -68,12 +77,14 @@ public class FadeController : MonoBehaviour
         {
             blacks[i].gameObject.SetActive(true);
         }
+
+        fadeCharacter.gameObject.SetActive(true);
     }
 
     private void Fade()
     {
         //右側の黒画像がスクリーンの右端のポジションより外に出た場合にフェードインを終了
-        if (isFadeIn && blacks[1].transform.position.x > screenEdgePos.x)
+        if (isFadeIn && fadeCharacter.transform.localScale.x > 3)
         {
             isFinishFade = true;
 
@@ -82,10 +93,12 @@ public class FadeController : MonoBehaviour
                 blacks[i].gameObject.SetActive(false);
             }
 
+            fadeCharacter.gameObject.SetActive(false);
+
             return;
         }
         //右側の黒画像がスクリーンの真ん中のポジションより左側に入った場合にフェードアウトを終了
-        else if (!isFadeIn && blacks[1].transform.position.x <= screenCenterPos.x)
+        else if (!isFadeIn && fadeCharacter.transform.localScale.x < 0.02f)
         {
             isFinishFade = true;
 
@@ -120,5 +133,10 @@ public class FadeController : MonoBehaviour
         blacks[3].transform.position = isFadeIn ?
                                 blacks[3].transform.position + moveDown :
                                 blacks[3].transform.position + moveUp;
+
+        var addAmount
+             = isFadeIn ? Vector3.one * fixedSpeed : -Vector3.one * fixedSpeed;
+
+        fadeCharacter.transform.localScale += addAmount * 0.5f;
     }
 }
