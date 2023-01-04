@@ -24,7 +24,6 @@ public class TutorialHand : MonoBehaviour
         defaultPosition = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
         //プレイヤーがクリックをしたらチュートリアル終了

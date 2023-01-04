@@ -30,6 +30,7 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadScene(index));
     }
 
+    //現在のシーンを再読み込み
     public void LoadNowScene()
     {
         index = SceneManager.GetActiveScene().buildIndex;
@@ -49,10 +50,39 @@ public class SceneLoader : MonoBehaviour
         StartCoroutine(LoadScene(index));
     }
 
+    //タイトルシーンを読み込み
+    //タイトルシーンはScenesInBuildの先頭に置く
+    public void LoadTitle()
+    {
+        StartCoroutine(LoadScene(0));
+    }
+
+    //ステージ選択シーンをロードする
+    public void LoadStageSelect()
+    {
+        StartCoroutine(LoadSceneByName("StageSelect"));
+    }
+
+    //引数で渡されたシーンをロードする
+    public void LoadSelectedScene(int index)
+    {
+        StartCoroutine(LoadScene(index));
+    }
+
+    //フェードが終わるまでシーンのロードを待機する
     private IEnumerator LoadScene(int index)
     {
         yield return new WaitUntil(() => canLoad);
 
         SceneManager.LoadScene(index);
     }
+
+    private IEnumerator LoadSceneByName(string name)
+    {
+        yield return new WaitUntil(() => canLoad);
+
+        SceneManager.LoadScene(name);
+    }
+
+
 }

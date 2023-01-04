@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//シーンを跨いでもBGMを続けて鳴らすスクリプト
 public class BGM : MonoBehaviour
 {
     [SerializeField]
@@ -14,8 +15,6 @@ public class BGM : MonoBehaviour
         {
             i = this;
             DontDestroyOnLoad(i);
-
-            audioSource.time = 12f;
 
             audioSource.Play();
         }

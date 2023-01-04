@@ -9,9 +9,10 @@ public class Save : MonoBehaviour
     //シーンのクリア時に呼ばれる。その次のシーンのインデックス番号を保存する。
     public void SaveSceneNumber()
     {
-        PlayerPrefs.SetInt("SceneIndex", SceneManager.GetActiveScene().buildIndex + 1);
+        //既にクリア済みのステージの場合はセーブしない
+        if (SceneManager.GetActiveScene().buildIndex < PlayerPrefs.GetInt("SceneIndex")) return;
 
-        // Debug.Log(PlayerPrefs.GetInt("SceneIndex"));
+        PlayerPrefs.SetInt("SceneIndex", SceneManager.GetActiveScene().buildIndex + 1);
 
         PlayerPrefs.Save();
     }

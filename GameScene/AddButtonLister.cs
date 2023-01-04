@@ -14,10 +14,16 @@ public class AddButtonLister : MonoBehaviour
         Reset,
         GoNextStage,
         Continue,
+        GoStageSelect,
+        StageSelect,
+        Title,
     }
 
     [SerializeField]
     private ButtonType type;
+
+    [SerializeField]
+    private int stageNumber;
 
     void Awake()
     {
@@ -50,6 +56,18 @@ public class AddButtonLister : MonoBehaviour
                     targetButton.onClick.AddListener(ResourceProvider.i.sceneLoader.LoadLastScene); 
                     break;
                 }
+            case ButtonType.GoStageSelect
+             :
+                targetButton.onClick.AddListener(ResourceProvider.i.sceneLoader.LoadStageSelect);
+                break;
+            case ButtonType.StageSelect
+             :
+                targetButton.onClick.AddListener(() => ResourceProvider.i.sceneLoader.LoadSelectedScene(stageNumber));
+                break;
+            case ButtonType.Title
+             :
+                targetButton.onClick.AddListener(ResourceProvider.i.sceneLoader.LoadTitle);
+                break;
         }
 
         targetButton.onClick.AddListener(ResourceProvider.i.fadeController.FadeOut);
